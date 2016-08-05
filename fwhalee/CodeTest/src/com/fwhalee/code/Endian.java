@@ -5,14 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+
 /**
- * 32ºñÆ®ÀÇ Endian ¼ö¸¦ ¾ò´Â´Ù.
+ * 32ï¿½ï¿½Æ®ï¿½ï¿½ Endian ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â´ï¿½.
  * @author fwhalee
  *
  */
 public class Endian {
-
+    
+    
 	private final static int EIGHT = 8;
+	private final static int BIT_32 = 32;
 	
 	
     public static void main(String[] args) {
@@ -35,49 +38,33 @@ public class Endian {
 		
 		
     }
-
-
+    
+    
 	/**
-	 * 32ºñÆ®ÀÇ º¯È¯µÈ Endian ¼ö¸¦ ¾ò´Â´Ù.
+	 * 32ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ Endian ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â´ï¿½.
 	 * @param num
 	 * @return
 	 */
 	public static long getEndian(long num) {
 		
     	String binStr = Long.toBinaryString(num);
-        int binStrSize = binStr.length();
         
-        // ºñÆ®¼ö°¡ ÁöÁ¤µÇ¾î ÀÖÁö ¾ÊÀ» °æ¿ì
-        /*
-        int quotient = binStrSize / EIGHT;
-        quotient++;
-        */
-        int quotient = 4;
-        int length = EIGHT * quotient;
-        // 0À» Ã¤¿ï ÀÚ¸®¼ö
-        int diff = length - binStrSize;
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < diff; i++) {
+        for (int i = 0; i < (BIT_32 - binStr.length()); i++)
         	sb.append("0");
-        }
-        
         String newStr = sb.toString() + binStr;
-        List<String> packageEight = new ArrayList<String>();
-        for (int i = 0; i < quotient; i++)
-        {
-        	packageEight.add(newStr.substring(EIGHT * i, EIGHT * (i+1)));
-        }
         
-        Collections.reverse(packageEight);
+        List<String> packageEightUnit = new ArrayList<String>();
+        for (int i = 0; i < 4; i++)
+        	packageEightUnit.add(newStr.substring(EIGHT * i, EIGHT * (i+1)));
+        
+        Collections.reverse(packageEightUnit);
         StringBuilder sb2 = new StringBuilder();
-        for (String s : packageEight) {
+        for (String s : packageEightUnit)
         	sb2.append(s);
-        }
         
         return Long.parseLong(sb2.toString(), 2);
 	}
-	
-	
 	
 	
 }
