@@ -7,15 +7,15 @@ import java.util.Scanner;
 
 
 /**
- * 32��Ʈ�� Endian ���� ��´�.
+ * Endian 수 변환 (only 32bit)
  * @author fwhalee
  *
  */
 public class Endian {
     
     
+    private final static int BIT_32 = 32;
 	private final static int EIGHT = 8;
-	private final static int BIT_32 = 32;
 	
 	
     public static void main(String[] args) {
@@ -41,7 +41,7 @@ public class Endian {
     
     
 	/**
-	 * 32��Ʈ�� ��ȯ�� Endian ���� ��´�.
+	 * Endian 수 변환 (only 32bit)
 	 * @param num
 	 * @return
 	 */
@@ -49,11 +49,13 @@ public class Endian {
 		
     	String binStr = Long.toBinaryString(num);
         
+    	// 해당 문자열에 32자리가 될때까지 0을 채워준다.
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < (BIT_32 - binStr.length()); i++)
         	sb.append("0");
         String newStr = sb.toString() + binStr;
         
+        // 문자열을 8자리 단위로 나눈다.
         List<String> packageEightUnit = new ArrayList<String>();
         for (int i = 0; i < 4; i++)
         	packageEightUnit.add(newStr.substring(EIGHT * i, EIGHT * (i+1)));
