@@ -68,66 +68,66 @@ void find_piece(int line, int n)
         if(x<=n) continue;
         
         
-            //check left-top diagonol
-            
-            x = line; y = i;
-            if ( x < y )
-            {
-                y -= (x-1);
-                x = 1;
-            }
-            else
-            {
-                x -= (y - 1);
-                y =1;
-            }
-        
-            while((x<=n)&&(y<=n))
-            {
-                if(arr[x][y]==1) break;
-                x++;
-                y++;
-            }
-            if((x <= n) && (y<=n)) continue;
-        
-            //check right-top diagonol
-            
-            x = line; y = i;
-        
-            int sum = x+y;
+		//check left-top diagonol
+		
+		x = line; y = i;
+		if ( x < y )
+		{
+			y -= (x-1);
+			x = 1;
+		}
+		else
+		{
+			x -= (y - 1);
+			y =1;
+		}
+	
+		while((x<=n)&&(y<=n))
+		{
+			if(arr[x][y]==1) break;
+			x++;
+			y++;
+		}
+		if((x <= n) && (y<=n)) continue;
+	
+		//check right-top diagonol
+		
+		x = line; y = i;
+	
+		int sum = x+y;
 
-            if(sum == (n+1))
-            {
-                x = 1;
-                y = n;
-            }
-            else if(sum<(n+1))
-            {
-                y += (x-1);
-                x = 1;
-            }
-            else
-            {
-                x-=(n-y);
-                y = n;
-            }
-        
-            while((x<=n)&&(y>=1))
-            {
-                if(arr[x][y]==1) break;
-                x++;
-                y--;
-            }
-            if((x <= n) && (y>=1)) continue;
-        
+		if(sum == (n+1))
+		{
+			x = 1;
+			y = n;
+		}
+		else if(sum<(n+1))
+		{
+			y += (x-1);
+			x = 1;
+		}
+		else
+		{
+			x-=(n-y);
+			y = n;
+		}
+	
+		while((x<=n)&&(y>=1))
+		{
+			if(arr[x][y]==1) break;
+			x++;
+			y--;
+		}
+		if((x <= n) && (y>=1)) continue;
+	
 
-        // all pass!
-            {
-                arr[line][i] = 1;
-                find_piece(line+1, n);
-                arr[line][i] = 0;
-                
-            }
+	// all pass!
+		{
+			arr[line][i] = 1;
+			find_piece(line+1, n);
+			arr[line][i] = 0;
+			
+		}
         
     }
 }

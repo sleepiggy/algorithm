@@ -27,7 +27,7 @@ public class NQueens {
 		
 		
 		for (int i = 0; i < size; i++) {
-			for (int j = 0; i < size; j++) {
+			for (int j = 0; j < size; j++) {
 			
 			// 체스판 초기화
 			// 0: 아무것도 두지 않은 상태
