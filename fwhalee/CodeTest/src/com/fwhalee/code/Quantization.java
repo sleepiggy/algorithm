@@ -1,7 +1,6 @@
 package com.fwhalee.code;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Quantization {
     
@@ -14,23 +13,44 @@ public class Quantization {
         
         try {
             
-            Scanner reader = new Scanner(System.in);
+//            Scanner reader = new Scanner(System.in);
             
-            int firstLine = reader.nextInt();
-            for (int i = 0; i < firstLine; i++) {
+//            int firstLine = reader.nextInt();
+            for (int i = 0; i < 1; i++) {
                 
                 // 수열 개수, 최대 양자화 수 받기
                 // long line = reader.nextLong();
-                int quantizeNum = 2;
+                int quantizeNum = 3;
                 
-                // 수열 받기 
-                sequence.add(1);
+                // 수열 받기
+                /*sequence.add(1);
                 sequence.add(2);
                 sequence.add(3);
-                sequence.add(4);
+                sequence.add(4);*/
                 
-                int result = getTotalMinError(quantizeNum, 1);
-                System.out.println(result);
+                /*sequence.add(1);
+                sequence.add(1);
+                sequence.add(2);
+                sequence.add(2);
+                sequence.add(2);
+                sequence.add(2);
+                sequence.add(3);
+                sequence.add(3);
+                sequence.add(3);
+                sequence.add(3);
+                */
+                
+                sequence.add(1);
+                sequence.add(4);
+                sequence.add(6);
+                sequence.add(744);
+                sequence.add(755);
+                sequence.add(777);
+                sequence.add(890);
+                sequence.add(897);
+                sequence.add(902);
+                int result = getTotalMinError(quantizeNum, 0);
+                System.out.println("total Min Error: " + result);
                 
             }
             
@@ -43,22 +63,28 @@ public class Quantization {
     
     public static int getTotalMinError(int quantizeNum, int offset) {
         
-        
-        System.out.println("quantinzeNum: " + quantizeNum);
-        System.out.println("sequence: " + sequence);
-        
+        System.out.println("quantizeNum: " + quantizeNum + " / offset: " + offset);
+        if (quantizeNum == 0) return Integer.MAX_VALUE;
+        if (offset == sequence.size()) {
+        	System.out.println("exit");
+        	return 0;
+        }
         if (quantizeNum == 1) {
             // S가 1일 때 최소 오차 구하기. return
+        	return getMinError(offset, sequence.size() - offset);
         }
         int minError = Integer.MAX_VALUE;
         
         // 수열 분할에 대한 recursive
-        for (int i = 0; i < (sequence.size() - offset + 1); i++) {
+        for (int i = 0; i < (sequence.size() - offset - quantizeNum + 1); i++) {
             
-            int tempMinError = getMinError(offset, i + 1) + getTotalMinError(quantizeNum - 1, offset + 1);
+            int tempMinError = getMinError(offset, i + 1) + getTotalMinError(quantizeNum - 1, offset + i + 1);
+            if (minError >= tempMinError) {
+            	minError = tempMinError;
+            }
         }
         
-        return -1;
+        return minError;
     }
     
     
@@ -73,10 +99,14 @@ public class Quantization {
         // 반올림
         int avg = Math.round(sum / size);
         int error = 0;
+        System.out.println("offset:" + offset + " / size: " + size);
         for (int i = offset; i < (offset + size); i++) {
-            error = (int) Math.pow((error - avg), 2);
+        	System.out.print(sequence.get(i) + "|");
+            error += (int) Math.pow((sequence.get(i) - avg), 2);
         }
-        
+        System.out.print("error: " + error);
+        System.out.println("");
+        System.out.println("");
         return error;
     }
     
