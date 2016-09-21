@@ -20,7 +20,7 @@ public class Memory {
         
         DecimalFormat format = new DecimalFormat("###,###,###.##");
         
-        //JVM이 현재 시스템에 요구 가능한 최대 메모리량, 이 값을 넘으면 OutOfMemory 오류가 발생 합니다.               
+        //JVM이 현재 시스템에 요구 가능한 최대 메모리량, 이 값을 넘으면 OutOfMemory 오류가 발생 합니다.
         long max = r.maxMemory();
         
         //JVM이 현재 시스템에 얻어 쓴 메모리의 총량
