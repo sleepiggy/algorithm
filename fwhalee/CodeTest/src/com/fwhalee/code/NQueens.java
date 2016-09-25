@@ -1,5 +1,7 @@
 package com.fwhalee.code;
 
+import java.util.Scanner;
+
 public class NQueens {
 
 	public static void main(String[] args) {
@@ -16,8 +18,21 @@ public class NQueens {
 		
 		// 검색시 남은 열중 하나라도 2로 모두 채워지면 그만
 		
-		getNQueens(8);
 		
+		Scanner reader = new Scanner(System.in);
+		try {
+            
+            int caseNum = reader.nextInt();
+            for (int i = 0; i < caseNum; i++) {
+            	
+            	int boardSize = reader.nextInt();
+        		getNQueens(8);
+        		
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+		}
 	}
 	
 	
@@ -25,7 +40,7 @@ public class NQueens {
 		
 		int result = 0;
 		
-		
+		/*
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 			
@@ -49,7 +64,7 @@ public class NQueens {
 			
 			}
 		}
-		
+	*/	
 		return result;
 	}
 	
