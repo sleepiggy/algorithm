@@ -7,11 +7,10 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 
-#define MAX_VERTEX 1000
+#define MAX_VERTEX 10000
 #define MAX_FLOAT 1000.0f
-
-float arr[MAX_VERTEX][MAX_VERTEX];
 
 float least[MAX_VERTEX];
 int found[MAX_VERTEX];
@@ -19,28 +18,81 @@ int found[MAX_VERTEX];
 void find_min_path();
 int cnt;
 
+typedef struct
+{
+    int vertex;
+    float val;
+    void *prev;
+    void *next;
+}list;
+
+typedef struct{
+    list *data;
+    int cnt;
+    list *last;
+}enlist;
+
+enlist arr[MAX_VERTEX];
+
+void enlist_init(enlist *el)
+{
+    list *li;
+    el->cnt = 0;
+    
+    el->last = 0;
+    li = el->data;
+    while(li)
+    {
+        list *next = li->next;
+        free(li);
+        li = next;
+    }
+    el->data = 0;
+}
+
+void enlist_add(int idx, int vertex, float val)
+{
+    list *temp = arr[idx].last;
+    list *new = malloc(sizeof(list));
+    arr[idx].last = new;
+    new->val = val;
+    new->prev = temp;
+    new->vertex = vertex;
+    new->next = 0;
+    if(arr[idx].cnt == 0)
+        arr[idx].data = new;
+    else temp->next = new;
+    arr[idx].cnt++;
+}
+
+list *enlist_exist(int idx, int vertex)
+{
+    list *li;
+    li = arr[idx].data;
+    while(li)
+    {
+        if( (li->vertex) == vertex) return li;
+        li = (li->next);
+    }
+    return 0;
+}
+
 int main(int argc, const char * argv[]) {
     FILE *fp;
     int test_cnt;
     int edge_cnt;
-    int i, j, k;
-    fp = fopen("/Users/K/work/algorithm/MK/ROUTING/ROUTING/input.txt","r");
-    //fp = stdin;
+    int i, j;
+    //fp = fopen("/Users/K/work/algorithm/MK/ROUTING/ROUTING/input.txt","r");
+    fp = stdin;
     fscanf(fp, "%d ", &test_cnt);
     
     for ( i = 0 ; i < test_cnt ; i++)
     {
         fscanf(fp, "%d %d ", &cnt, &edge_cnt);
         
-        if(cnt > 1000)
-        {
-            printf("1.0\n");
-            continue;
-        }
         for(j = 0 ; j < cnt; j ++)
         {
-            for(k = 0 ; k < cnt; k ++)
-                arr[j][k] = 0;
+            enlist_init(&(arr[j]));
             least[j] = MAX_FLOAT;
             found[j] = 0;
         }
@@ -51,7 +103,8 @@ int main(int argc, const char * argv[]) {
             int p,q;
             float f;
             fscanf(fp, "%d %d %f ",&p, &q, &f);
-            arr[p][q]=arr[q][p]=f;
+            enlist_add(p,q,f);
+            enlist_add(q,p,f);
             if(p==0) least[q] = f;
             else if(q==0) least[p] = f;
         }
@@ -104,10 +157,11 @@ void find_min_path()
 
         for(i = 0 ; i < cnt ; i ++)
         {
+            list *li = enlist_exist(next,i);
             if (found[i] != 0) continue;
-            if (arr[next][i] == 0) continue;
+            if ( li == 0) continue;
             if (least[next] == MAX_FLOAT) continue;
-            next_noise = (least[next] * arr[next][i]);
+            next_noise = (least[next] * li->val);
             
             if(next_noise < least[i]) least[i] = next_noise;
         }
