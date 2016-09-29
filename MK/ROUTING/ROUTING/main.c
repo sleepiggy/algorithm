@@ -10,9 +10,9 @@
 #include <stdlib.h>
 
 #define MAX_VERTEX 10000
-#define MAX_FLOAT 1000.0f
+#define MAX_FLOAT 99999
 
-float least[MAX_VERTEX];
+double least[MAX_VERTEX];
 int found[MAX_VERTEX];
 
 void find_min_path();
@@ -21,7 +21,7 @@ int cnt;
 typedef struct
 {
     int vertex;
-    float val;
+    double val;
     void *prev;
     void *next;
 }list;
@@ -41,16 +41,18 @@ void enlist_init(enlist *el)
     
     el->last = 0;
     li = el->data;
+    
     while(li)
     {
         list *next = li->next;
         free(li);
         li = next;
     }
+    
     el->data = 0;
 }
 
-void enlist_add(int idx, int vertex, float val)
+void enlist_add(int idx, int vertex, double val)
 {
     list *temp = arr[idx].last;
     list *new = malloc(sizeof(list));
@@ -93,7 +95,7 @@ int main(int argc, const char * argv[]) {
         for(j = 0 ; j < cnt; j ++)
         {
             enlist_init(&(arr[j]));
-            least[j] = MAX_FLOAT;
+            least[j] = -1;
             found[j] = 0;
         }
         found[0] = 1;
@@ -101,8 +103,8 @@ int main(int argc, const char * argv[]) {
         for(j = 0 ; j < edge_cnt; j ++)
         {
             int p,q;
-            float f;
-            fscanf(fp, "%d %d %f ",&p, &q, &f);
+            double f;
+            fscanf(fp, "%d %d %lf ",&p, &q, &f);
             enlist_add(p,q,f);
             enlist_add(q,p,f);
             if(p==0) least[q] = f;
@@ -121,7 +123,7 @@ int main(int argc, const char * argv[]) {
          printf("%.10f ",least[k]);
          printf("\n");
          }
-        */
+         */
     }
     return 0;
 }
@@ -130,50 +132,84 @@ int main(int argc, const char * argv[]) {
 int find_least()
 {
     int i;
-    float min = MAX_FLOAT;
+    double min = -1;
     int min_idx = 0;
-
+    
     for(i = 1 ; i < cnt ; i ++)
     {
-        if((found[i] == 0) && (min > least[i]))
+        if((found[i] == 0) && (least[i] != -1))
         {
-            min_idx = i;
-            min = least[i];
+            if((min > least[i]) || (min == -1))
+            {
+                min_idx = i;
+                min = least[i];
+            }
         }
-    //    printf("%f(%d)(%f) ", least[i], found[i],min);
+        //   printf("%f(%d)(%f) ", least[i], found[i],min);
     }
-  //  printf("\n");
+    /*
+    if (min == -1)
+    {
+        for(i = 1 ; i < cnt ; i ++)
+        {
+            if((found[i] == 0) && (least[i] == -1))
+            {
+                min_idx = i;
+                min = least[i];
+                break;
+                
+            }
+        }
+    }*/
+   // printf(" %d\n", min_idx);
     
     return min_idx;
 }
 void find_min_path()
 {
     int i, j,next = 0;
-    float next_noise;
-
+    double next_noise;
+    
     for(j = 1 ; j < cnt; j ++)
     {
         next = find_least();
-
-        for(i = 0 ; i < cnt ; i ++)
+        
+        if(next == 0) break;
+        list *li = (arr[next].data);
+        //        printf("\n%p(%p)\n",li,li->next);
+        while(li)
         {
-            list *li = enlist_exist(next,i);
-            if (found[i] != 0) continue;
-            if ( li == 0) continue;
-            if (least[next] == MAX_FLOAT) continue;
-            next_noise = (least[next] * li->val);
+            i = li->vertex;
+            if (found[i] == 1)
+            {
+                list *lir = li;
+                if(li->prev)
+                ((list*)(li->prev))->next = li->next;
+                else
+                    arr[next].data = li->next;
+                if(li->next)
+                ((list*)(li->next))->prev = li->prev;
+                else
+                    arr[next].last = li->prev;
+                arr[next].cnt--;
+                li = (li->next);
+                free(lir);
+                continue;
+            }
+            if (least[next] == -1)
+            {
+                li = (li->next);
+                continue;
+            }
+            next_noise = (least[next] * (li->val));
             
-            if(next_noise < least[i]) least[i] = next_noise;
+            if (least[i] == -1) least[i] = next_noise;
+            else if (next_noise < least[i]) least[i] = next_noise;
+            li = (li->next);
         }
         
         found[next] = 1;
-      //  printf("%d \n", next);
+        //        printf("%d \n", next);
     }
-   // printf(" \n");
+    // printf(" \n");
 }
-
-
-
-
-
-
