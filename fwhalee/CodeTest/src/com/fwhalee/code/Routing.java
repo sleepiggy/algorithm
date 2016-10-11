@@ -51,6 +51,7 @@ public class Routing {
                     int source = Integer.parseInt(nodeInfoArry[0]);
                     int dest = Integer.parseInt(nodeInfoArry[1]);
                     double noise = Double.parseDouble(nodeInfoArry[2]);
+            		noise = Math.log(noise);
             		
             		connectInfoList.get(source).add(new ConnectInfo(dest, noise));
             		connectInfoList.get(dest).add(new ConnectInfo(source, noise));
@@ -58,8 +59,8 @@ public class Routing {
             	
             	
             	destIndex = nodeNum - 1;
-            	getMinPath(0, 1);
-            	System.out.printf("%.10f\n", minNoise);
+            	getMinPath(0, 0);
+            	System.out.printf("%.10f\n", Math.exp(minNoise));
             	
             }
         } catch (Exception e) {
@@ -84,7 +85,7 @@ public class Routing {
 			double tempTotal = -1;
 			for (int i = 0; i < connectInfoList.get(index).size(); i++) {
 				tempTotal = total;
-				tempTotal *= connectInfoList.get(index).get(i).noise;
+				tempTotal += connectInfoList.get(index).get(i).noise;
 				getMinPath(connectInfoList.get(index).get(i).node, tempTotal);
 			}
 			visitList.set(index, 0);
