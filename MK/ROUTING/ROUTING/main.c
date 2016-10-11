@@ -180,6 +180,7 @@ void find_min_path()
         while(li)
         {
             i = li->vertex;
+            /*
             if (found[i] == 1)
             {
                 list *lir = li;
@@ -196,6 +197,7 @@ void find_min_path()
                 free(lir);
                 continue;
             }
+             */
             if (least[next] == -1)
             {
                 li = (li->next);
@@ -209,6 +211,7 @@ void find_min_path()
         }
         
         found[next] = 1;
+        if(next == (cnt-1)) return;
         //        printf("%d \n", next);
     }
     // printf(" \n");
