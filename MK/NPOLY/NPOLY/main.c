@@ -8,8 +8,13 @@
 
 #include <stdio.h>
 
-#define MOD 10000000
+#define MOD 20090711
+// poly[x][y] : The number of polyominos when y block exist and top floor block is (y-x+1).
 int poly[101][101];
+
+// symmetry[x][y] : The number of symmetries when the sum of numbers are y, last number is x.
+int symmetry[101][101];
+
 int max_n = 1;
 int now_n = 1;
 
@@ -36,6 +41,7 @@ int main(int argc, const char * argv[]) {
             max_n = n;
         }
         
+        // Calc poly;
         for(i = now_n ; i <= max_n ; i++)
         {
             for (j = 1; j <= i ; j ++)
@@ -55,14 +61,48 @@ int main(int argc, const char * argv[]) {
                 poly[j][i] = sum;
             }
         }
+        //Calc symmetry;
         
+        for(i = now_n ; i <= max_n ; i ++)
+        {
+            for( j = 1 ; j <= i ; j ++)
+            {
+
+                if (( j == i) || (( 2 * j ) == i))
+                {
+                    symmetry[j][i] = 1;
+//                    printf("(%d,%d) = %d\n",j,i,symmetry[j][i]);
+                    continue;
+                }
+                if ( (2 * j) > i)
+                {
+                    symmetry[j][i] = 0;
+//                    printf("(%d,%d) = %d\n",j,i,symmetry[j][i]);
+                    continue;
+                }
+                int sum = 0;
+                int sub = i - ( 2 * j);
+                for( k = 1 ; k <= sub ; k++)
+                {
+                    sum += (symmetry[k][sub] * (k + j - 1));
+                    sum %= MOD;
+
+                }
+                symmetry[j][i] = sum;
+//                printf("(%d,%d) = %d\n",j,i,symmetry[j][i]);
+            }
+        }
+        
+        //Calc res;
         for ( j = 1 ; j <= n ; j ++)
         {
             res += poly[j][n];
-            res %= MOD;
-          //  printf("%d + ",poly[j][n]);
+            //  printf("+%d ",poly[j][n]);
+            res -= symmetry[n-j+1][n];
+             // printf("-%d + ",symmetry[n-j+1][n]);
         }
-        
+        res %= MOD;
+
         printf("%d\n",res);
     }
 
