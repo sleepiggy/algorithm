@@ -26,8 +26,8 @@ int main(int argc, const char * argv[]) {
     int i,j,k;
     int res;
     
-//    fp = fopen("/Users/K/work/algorithm/MK/NPOLY/NPOLY/input.txt","r");
-    fp = stdin;
+    fp = fopen("/Users/K/work/algorithm/MK/NPOLY/NPOLY/input.txt","r");
+//    fp = stdin;
     
     fscanf(fp, "%d ", &test_cnt);
     while(test_cnt)
