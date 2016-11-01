@@ -110,46 +110,6 @@ public class FamilyTree {
 	}
 	
 	
-	
-	
-	@Deprecated
-	public static void findDegree(int current, int count) {
-		/*
-		findChild(current, 0);
-		
-		if (!isFind) {
-			count++;
-			parentCount = count;
-			nodeList.get(current).setVisit(true);
-			int parent = nodeList.get(current).getParent();
-			findDegree(parent, count);
-		}
-		*/
-	}
-	
-	
-	@Deprecated
-	public static void findChild(int current, int count) {
-		/*
-		if (isFind) return;
-		
-		if (current == g_dest) {
-			isFind = true;
-			childCount = count;
-			return;
-		}
-		
-		count++;
-		ArrayList<Integer> tempList = nodeList.get(current).getChildList();
-		for (int i = 0; i < tempList.size(); i++) {
-			if (!nodeList.get(tempList.get(i)).isVisit()) {
-				findChild(tempList.get(i), count);
-			}
-		}
-		*/
-	}
-	
-	
 }
 
 
