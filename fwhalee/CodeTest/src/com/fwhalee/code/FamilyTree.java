@@ -8,6 +8,7 @@ public class FamilyTree {
 	
 	
 	public static int[] parentArry = new int[100001];
+	public static int[] levelArry = new int[100001];
 	
 	public static int g_src;
 	public static int g_dest;
@@ -34,8 +35,12 @@ public class FamilyTree {
                 
                 // set parent info
                 parentArry[0] = -1;
+                levelArry[0] = 0;
+                
                 for (int j = 0; j < peopleArry.length; j++) {
-                    parentArry[j+1] = Integer.parseInt(peopleArry[j]);
+                	int parent = Integer.parseInt(peopleArry[j]);
+                    parentArry[j+1] = parent;
+                    levelArry[j+1] = levelArry[parent] + 1;
                 }
                 
                 for (int j = 0; j < caseNum2; j++) {
@@ -47,7 +52,7 @@ public class FamilyTree {
     	            int src = Integer.parseInt(caseArry[0]);
     	            int dest = Integer.parseInt(caseArry[1]);
     	            
-    	            int distance = findDegree2(src, dest);
+    	            int distance = findDegree3(src, dest);
     	            System.out.println(distance);
     	            
                 }
@@ -58,6 +63,34 @@ public class FamilyTree {
         } finally {
 		}
 		
+	}
+	
+	
+	public static int findDegree3(int src, int dest) {
+		
+		
+		int count = Math.abs(levelArry[src] - levelArry[dest]);
+		if (levelArry[src] < levelArry[dest]) {
+			for (int i = 0; i < count; i++) {
+				dest = parentArry[dest];
+			}
+		} else {
+			for (int i = 0; i < count; i++) {
+				src = parentArry[src];
+			}
+		}
+		
+		int count2 = 0;
+		while(true) {
+			if (src == dest) {
+				break;
+			}
+			src = parentArry[src];
+			dest = parentArry[dest];
+			count2++;
+		}
+		
+ 		return count + count2 * 2;
 	}
 	
 	
