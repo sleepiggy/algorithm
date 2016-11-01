@@ -84,6 +84,12 @@ public class FamilyTree {
 	    current = dest;
         parent = -1;
 	    while(true) {
+	    	for (int i = 0; i < srcParentList.size(); i++) {
+	    		if (current == srcParentList.get(i)) {
+	    			
+	    		}
+	    	}
+	    	
 	        destParentList.add(current);
             parent = parentArry[current];
             if (parent == -1) break;
