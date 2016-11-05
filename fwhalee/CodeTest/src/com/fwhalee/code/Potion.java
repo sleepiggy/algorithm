@@ -6,10 +6,10 @@ import java.io.InputStreamReader;
 public class Potion {
 	
 	
-	private static int[] potion = new int[200];
-	private static int[] putPotion = new int[200];
-	private static int[] dividePotion = new int[200];
-	private static int[] rate = new int[200];
+	private static int[] ingreIntArry;
+	private static int[] putIngreIntArry;
+	private static int[] dividedIngreIntArry;
+	private static int[] finallIngreIntArry;
 	
 	
 	public static void main(String[] args) {
@@ -24,71 +24,27 @@ public class Potion {
 		    int caseNum = Integer.parseInt(in);
             for (int i = 0; i < caseNum; i++) {
             	
-                in = br.readLine();
-                int potionNum = Integer.parseInt(in);
-                
-                in = br.readLine();
-                String[] rateArry = in.split("\\s+");
-                in = br.readLine();
-                String[] putArry = in.split("\\s+");
-                
-                potion = new int[200];
-            	putPotion = new int[200];
-            	dividePotion = new int[200];
-            	rate = new int[200];
+            	ingreIntArry = new int[200];
+            	putIngreIntArry = new int[200];
+            	dividedIngreIntArry = new int[200];
+            	finallIngreIntArry = new int[200];
             	
-                for (int j = 0; j < potionNum; j++) {
-                	potion[j] = Integer.parseInt(rateArry[j]);
-                	putPotion[j] = Integer.parseInt(putArry[j]);
+            	
+            	in = br.readLine();
+                int ingreNum = Integer.parseInt(in);
+                
+                in = br.readLine();
+                String[] ingreStrArry = in.split("\\s+");
+                in = br.readLine();
+                String[] putIngreStrArry = in.split("\\s+");
+                
+                for (int j = 0; j < ingreNum; j++) {
+                	ingreIntArry[j] = Integer.parseInt(ingreStrArry[j]);
+                	putIngreIntArry[j] = Integer.parseInt(putIngreStrArry[j]);
                 }
                 
-                int gcd = potion[0];
-                for (int j = 1; j < potionNum; j++) {
-                	gcd = gcd_recursion(gcd, potion[j]);
-                }
+                getAnswer(ingreNum);
                 
-                if (gcd > 0) {
-	                for (int j = 0; j < potionNum; j++) {
-	                	dividePotion[j] = potion[j] / gcd;
-	                }
-                }
-                
-                int answer2 = 1;
-                int change2 = 0;
-                boolean temp = false;
-                for (int j = 0; j < potionNum; j++) {
-                	if (putPotion[j] > potion[j]) {
-                		temp = true;
-                		break;
-                	}
-                }
-                
-                if (temp) {
-	                for (int j = 0; j < potionNum; j++) {
-	                	if (putPotion[j] > dividePotion[j]) {
-	                		if (answer2 <= (putPotion[j] / dividePotion[j])) {
-	                			answer2 = putPotion[j] / dividePotion[j];
-	                			change2 = putPotion[j] % dividePotion[j];
-	                		}
-	                	}
-	                }
-	                
-	                
-	                if (change2 > 0) answer2++;
-	                for (int j = 0; j < potionNum; j++) {
-	                	rate[j] = dividePotion[j] * (answer2);
-	                }
-	                
-	            	for (int j = 0; j < potionNum; j++) {
-	            		System.out.print((rate[j] - putPotion[j]) + " ");
-	            	}
-                } else {
-                	for (int j = 0; j < potionNum; j++) {
-	            		System.out.print((potion[j] - putPotion[j]) + " ");
-	            	}
-                }
-                
-                System.out.print("\n");
             }
             
         } catch (Exception e) {
@@ -100,14 +56,70 @@ public class Potion {
 	}
 	
 	
-	public static int gcd_recursion(int u, int v){
-	    
-	    if (v == 0){
-	        return u;
-	    }
-	    else{
-	        return gcd_recursion(v, u%v);
-	    }
+	public static void getAnswer(int ingreNum) {
+		
+		int gcd = ingreIntArry[0];
+        for (int j = 1; j < ingreNum; j++) {
+        	gcd = getGcd(gcd, ingreIntArry[j]);
+        }
+        
+        for (int j = 0; j < ingreNum; j++) {
+        	dividedIngreIntArry[j] = ingreIntArry[j] / gcd;
+        }
+        
+        boolean calculate = false;
+        for (int j = 0; j < ingreNum; j++) {
+        	if (putIngreIntArry[j] > ingreIntArry[j]) {
+        		calculate = true;
+        		break;
+        	}
+        }
+        
+        int answer = 1;
+        int rest = 0;
+        if (calculate) {
+            for (int j = 0; j < ingreNum; j++) {
+            	if (putIngreIntArry[j] > dividedIngreIntArry[j]) {
+            		if (answer <= (putIngreIntArry[j] / dividedIngreIntArry[j])) {
+            			answer = putIngreIntArry[j] / dividedIngreIntArry[j];
+            			rest = putIngreIntArry[j] % dividedIngreIntArry[j];
+            		}
+            	}
+            }
+            
+            if (rest > 0) answer++;
+            for (int j = 0; j < ingreNum; j++) {
+            	finallIngreIntArry[j] = dividedIngreIntArry[j] * (answer);
+            	System.out.print((finallIngreIntArry[j] - putIngreIntArry[j]) + " ");
+            }
+            
+        } else {
+        	for (int j = 0; j < ingreNum; j++) {
+        		System.out.print((ingreIntArry[j] - putIngreIntArry[j]) + " ");
+        	}
+        }
+        
+        System.out.print("\n");
+        
 	}
+	
+	
+	public static int getGcd(int n, int m) {
+		
+		if (n < m) {
+			int temp = n;
+			n = m;
+			m = temp;
+		}
+		
+		while (m != 0) {
+			int temp = n % m;
+			n = m;
+			m = temp;
+		}
+		
+		return n;
+	}
+	
 	
 }
