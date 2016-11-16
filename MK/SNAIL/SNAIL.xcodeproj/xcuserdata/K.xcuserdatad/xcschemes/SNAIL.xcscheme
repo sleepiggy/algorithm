@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0A5661BA1DD1F76D00DFC101"
-               BuildableName = "RUNNINGMEDIAN"
-               BlueprintName = "RUNNINGMEDIAN"
-               ReferencedContainer = "container:RUNNINGMEDIAN.xcodeproj">
+               BlueprintIdentifier = "0A6D4F751DDC7E7E0003DB97"
+               BuildableName = "SNAIL"
+               BlueprintName = "SNAIL"
+               ReferencedContainer = "container:SNAIL.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0A5661BA1DD1F76D00DFC101"
-            BuildableName = "RUNNINGMEDIAN"
-            BlueprintName = "RUNNINGMEDIAN"
-            ReferencedContainer = "container:RUNNINGMEDIAN.xcodeproj">
+            BlueprintIdentifier = "0A6D4F751DDC7E7E0003DB97"
+            BuildableName = "SNAIL"
+            BlueprintName = "SNAIL"
+            ReferencedContainer = "container:SNAIL.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0A5661BA1DD1F76D00DFC101"
-            BuildableName = "RUNNINGMEDIAN"
-            BlueprintName = "RUNNINGMEDIAN"
-            ReferencedContainer = "container:RUNNINGMEDIAN.xcodeproj">
+            BlueprintIdentifier = "0A6D4F751DDC7E7E0003DB97"
+            BuildableName = "SNAIL"
+            BlueprintName = "SNAIL"
+            ReferencedContainer = "container:SNAIL.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0A5661BA1DD1F76D00DFC101"
-            BuildableName = "RUNNINGMEDIAN"
-            BlueprintName = "RUNNINGMEDIAN"
-            ReferencedContainer = "container:RUNNINGMEDIAN.xcodeproj">
+            BlueprintIdentifier = "0A6D4F751DDC7E7E0003DB97"
+            BuildableName = "SNAIL"
+            BlueprintName = "SNAIL"
+            ReferencedContainer = "container:SNAIL.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
