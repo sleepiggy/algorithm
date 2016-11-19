@@ -9,6 +9,7 @@ public class RunningMedian {
 	
 	private static ArrayList<Double> numList;
 	
+	
 	public static void main(String[] args) {
 		
 		
@@ -35,13 +36,13 @@ public class RunningMedian {
                 	temp = ((temp * a) + b) % 20090711;
                 	insert(temp);
                 	
-                	// 중앙값 더하기
                 	int midIdx = (numList.size() - 1) / 2;
                 	sum += numList.get(midIdx);
                 }
                 
                 System.out.printf("%.0f\n", sum % 20090711);
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -52,18 +53,19 @@ public class RunningMedian {
 	
 	public static void insert(double num) {
 		
-		
+	    // num <= numList[0]
 		if (numList.get(0) >= num) {
 			numList.add(0, num);
 			return;
 		}
 		
+		// numList[last] <= num
 		if (numList.get(numList.size() - 1) <= num) {
 			numList.add(num);
 			return;
 		}
 		
-		// 0 ~ 마지막 index
+		// numList [0] < num < numList[last]
 		insertArry(num, 0, numList.size() - 1);
 		
 	}
@@ -82,7 +84,6 @@ public class RunningMedian {
 			}
 			return;
 		}
-		
 		
 		if (midValue == num) {
 			numList.add(midIdx, num);
