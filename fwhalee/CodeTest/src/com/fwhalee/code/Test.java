@@ -7,8 +7,12 @@ import java.io.InputStreamReader;
 public class Test {
 
     public static void main(String[] args) {
-        
-        
+    	
+    	
+    	double temp = Math.pow(0.75, 2);
+    	
+    	System.out.println(temp);
+        /*
         System.out.println(Double.MAX_VALUE);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String in = "";
@@ -40,7 +44,7 @@ public class Test {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+*/        
     }
 
 }
