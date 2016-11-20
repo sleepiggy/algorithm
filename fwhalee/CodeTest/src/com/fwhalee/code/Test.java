@@ -8,10 +8,11 @@ public class Test {
 
     public static void main(String[] args) {
     	
-    	
-    	double temp = Math.pow(0.75, 2);
-    	
-    	System.out.println(temp);
+    	System.out.println(combination(4, 0));
+    	System.out.println(combination(4, 1));
+    	System.out.println(combination(4, 2));
+    	System.out.println(combination(4, 3));
+    	System.out.println(combination(4, 4));
         /*
         System.out.println(Double.MAX_VALUE);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -46,5 +47,28 @@ public class Test {
         }
 */        
     }
+    
+    
+	public static int combination(int n, int r) {
+		
+		int comb = 1;
+		if (n != r && r != 0) {
+			int fac1 = 1;
+			for (int i = 0; i < r; i++) {
+				fac1 *= n;
+				n--;
+			}
+			
+			int fac2 = 1;
+			for (int i = 0; i < r; i++) {
+				fac2 *= r;
+				r--;
+			}
+			comb = fac1 / fac2;
+		}
+		
+		return comb;
+	}
 
+	
 }
