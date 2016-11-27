@@ -44,40 +44,39 @@ public class Snail {
 	
 	public static void process() {
 		
-		for (int i = 0; i <= g_date; i++) {
-			int j = g_date - i;
-			
-			double prob = Math.pow(0.75, i) * Math.pow(0.25, j);
-			int dist = (2 * i) + j;
-			
-			if (dist >= g_dist) {
-				g_prob = 1 - g_prob;
-				break;
+		
+		if (g_date > 0 && (g_date * 2) >= g_dist) {
+			for (int i = 0; i <= g_date; i++) {
+				int j = g_date - i;
+				
+				double prob = Math.pow(0.75, i) * Math.pow(0.25, j);
+				int dist = (2 * i) + j;
+				
+				if (dist >= g_dist) {
+					g_prob = 1 - g_prob;
+					break;
+				}
+				
+				double comb = combination(g_date, i);
+				g_prob += (prob * comb);
 			}
-			
-			double comb = combination(g_date, i);
-			g_prob += (prob * comb);
 		}
-			
+		
 	}
 	
 	
 	public static double combination(int n, int r) {
 		
+		double temp_n = n;
+		double temp_r = r;
 		double comb = 1;
 		if (n != r && r != 0) {
-			double fac1 = 1;
-			for (int i = 0; i < r; i++) {
-				fac1 *= n;
-				n--;
+			int count = r;
+			for (int i = 0; i < count; i++) {
+				comb *= temp_n / temp_r; 
+				temp_n--;
+				temp_r--;
 			}
-			
-			double fac2 = 1;
-			for (int i = 0; i < r; i++) {
-				fac2 *= r;
-				r--;
-			}
-			comb = fac1 / fac2;
 		}
 		
 		return comb;
