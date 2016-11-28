@@ -20,8 +20,8 @@ int main(int argc, const char * argv[]) {
     int test_cnt, m, n, i;
     long double prob;
     
-        fp = fopen("/Users/K/work/algorithm/MK/SNAIL/SNAIL/input.txt","r");
-//    fp = stdin;
+    fp = fopen("/Users/K/work/algorithm/MK/SNAIL/SNAIL/input.txt","r");
+    //            fp = stdin;
     
     fscanf(fp, "%d ", &test_cnt);
     
@@ -30,27 +30,41 @@ int main(int argc, const char * argv[]) {
         rain[i] = (rain[i-1] * 0.75L);
         norain[i] = (norain[i-1] * 0.25L);
     }
-//    printf("%.15Lf, %.15Lf\n", rain[100], norain[100]);
+    //    printf("%.15Lf, %.15Lf\n", rain[100], norain[100]);
     while(test_cnt)
     {
         fscanf(fp, "%d %d ", &n, &m);
         C[0] = 1;
         
-        prob = 0.0L;
+        prob = 0;
         
-        for(i = 0 ; i <= m ; i ++)
-        {
-            if(i!=0) C[i] = (C[i-1] * (m+1-i) / i);
-            if((i+m) >= n)
+//        if ( m >= n ) prob = 1;
+//        else
+            if ( (m*2) < n) prob = 0;
+        else  {
+            
+            for(i = 0 ; i <= m ; i ++)
             {
-                prob += ((long double)C[i] * rain[i] * norain[m-i]);
-//                printf("rain[%d] = %.10Lf, norain[%d] = %.10Lf\n",i-1,rain[i-1], m-i, norain[m-i]);
-
+                if(i!=0) C[i] = (C[i-1]  * (m+1-i)/ i);
+                if((i+m) >= n)
+                {
+//                    if(i==250)
+//                    {
+//                    printf("idx[%d], %d_C_%d(%ld) * rain(%.10Lf) * norain(%.10Lf) = %.10Lf\n",
+//                                               i, m, i, C[i],rain[i], norain[m-i],
+//                           ((long double)C[i] * rain[i] * norain[m-i]));
+//                    }
+                    prob += ((long double)C[i] * rain[i] * norain[m-i]);
+                    
+                    
+                }
+                
             }
+            
         }
         printf("%.10Lf\n",prob);
         test_cnt--;
     }
-
+    
     return 0;
 }
