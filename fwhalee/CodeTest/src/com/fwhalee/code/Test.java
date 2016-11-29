@@ -1,18 +1,10 @@
 package com.fwhalee.code;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class Test {
 
     public static void main(String[] args) {
     	
-    	System.out.println(combination(4, 0));
-    	System.out.println(combination(4, 1));
-    	System.out.println(combination(4, 2));
-    	System.out.println(combination(4, 3));
-    	System.out.println(combination(4, 4));
+    	System.out.println(combination(499, 250));
         /*
         System.out.println(Double.MAX_VALUE);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -49,26 +41,22 @@ public class Test {
     }
     
     
-	public static int combination(int n, int r) {
+	public static double combination(int n, int r) {
 		
-		int comb = 1;
+		double temp_n = n;
+		double temp_r = r;
+		double comb = 1;
 		if (n != r && r != 0) {
-			int fac1 = 1;
-			for (int i = 0; i < r; i++) {
-				fac1 *= n;
-				n--;
+			int count = r;
+			for (int i = 0; i < count; i++) {
+				comb *= temp_n / temp_r; 
+				temp_n--;
+				temp_r--;
 			}
-			
-			int fac2 = 1;
-			for (int i = 0; i < r; i++) {
-				fac2 *= r;
-				r--;
-			}
-			comb = fac1 / fac2;
 		}
 		
 		return comb;
 	}
-
+	
 	
 }
