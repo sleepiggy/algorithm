@@ -2,15 +2,16 @@ package com.fwhalee.code;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 public class EditorWars {
 	
 	
-	static ArrayList <HashSet <Integer>> viList;
-	static ArrayList <HashSet <Integer>> emacsList;
+	static int[] viArry;
+	static int[] emacsArry;
+	static int[] groupViArry;
+	static int[] groupEmacsArry;
 	
+	static int group;
 	static boolean error = false;
 	
 	
@@ -26,8 +27,12 @@ public class EditorWars {
 		    int caseNum = Integer.parseInt(in);
             for (int i = 0; i < caseNum; i++) {
             	
-            	viList = new ArrayList <HashSet <Integer>>();
-            	emacsList = new ArrayList <HashSet <Integer>>();
+            	viArry = new int[10000];
+            	emacsArry = new int[10000];
+            	groupViArry = new int[10000];
+            	groupEmacsArry = new int[10000];
+            	
+            	group = 1;
             	error = false;
             	
                 in = br.readLine();
@@ -42,26 +47,30 @@ public class EditorWars {
                     int p1 = Integer.parseInt(replyArry[1]);
                     int p2 = Integer.parseInt(replyArry[2]);
                     
-                    process(opn, p1, p2, j + 1);
+                    if (!error)
+                    	process(opn, p1, p2, j + 1);
                 }
                 
-                // hash에서 최대값 구해서 더하기
-                int sum = 0;
-                int viSum = 0;
-                int emacsSum = 0;
-                for (int j = 0; j < viList.size(); j++) {
-                	int max = viList.get(j).size();
-                	if (viList.get(j).size() <= emacsList.get(j).size()) {
-                		max = emacsList.get(j).size();
-                	}
-                	sum += max;
-                	viSum += viList.get(j).size();
-                	emacsSum += emacsList.get(j).size();
+                if (!error) {
+	                int sum = 0;
+	                int viSum = 0;
+	                int emacsSum = 0;
+	                
+	                for (int j = 1; j <= group; j++) {
+	                	int viListSize = groupViArry[j];
+	                	int emacsListSize = groupEmacsArry[j];
+	                	if (viListSize <= emacsListSize) {
+	                		sum += emacsListSize;
+	                	} else {
+	                		sum += viListSize;
+	                	}
+	                	viSum += viListSize;
+	                	emacsSum += emacsListSize;
+	                }
+	                int change = peopleNum - viSum - emacsSum;
+	                sum += change;
+	            	System.out.println("MAX PARTY SIZE IS " + sum);
                 }
-                int change = peopleNum - viSum - emacsSum;
-                sum += change;
-                if (!error)
-                	System.out.println("MAX PARTY SIZE IS " + sum);
                 
             }
         } catch (Exception e) {
@@ -73,89 +82,118 @@ public class EditorWars {
 	
 	
 	public static void process(String opn, int p1, int p2, int idx) {
-		/*
-		if (viList.size() == 0) {
-			viList.add(new HashSet<Integer>());
-			emacsList.add(new HashSet<Integer>());
+		
+		boolean isContain = false;
+		
+		boolean viP1 = false;
+		boolean viP2 = false;
+		boolean emacsP1 = false;
+		boolean emacsP2 = false;
+		
+		int viP1Before = 0;
+		int viP2Before = 0;
+		int emacsP1Before = 0;
+		int emacsP2Before = 0;
+		
+		if (viArry[p1] > 0) {
+			viP1 = true;
+			viP1Before = viArry[p1]; 
 		}
-		*/
+		if (viArry[p2] > 0 ) {
+			viP2 = true;
+			viP2Before = viArry[p2];
+		}
+		if (emacsArry[p1] > 0) {
+			emacsP1 = true;
+			emacsP1Before = emacsArry[p1];
+		}
+		if (emacsArry[p2] > 0) {
+			emacsP2 = true;
+			emacsP2Before = emacsArry[p2];
+		}
 		if (opn.equals("ACK")) {
 			
-			boolean isContain = false;
-			for (int i = 0; i < viList.size(); i++) {
-				boolean viP1 = viList.get(i).contains(p1);
-				boolean viP2 = viList.get(i).contains(p2);
-				boolean emacsP1 = emacsList.get(i).contains(p1);
-				boolean emacsP2 = emacsList.get(i).contains(p2);
-				
-				if ((viP1 && emacsP2) || (viP2 && emacsP1)) {
-					// error
-					System.out.println("CONTRADICTION AT " + idx);
-					error = true;
-					break;
-				}
-				
-				if (viP1 || viP2) {
-					viList.get(i).add(p1);
-					viList.get(i).add(p2);
-					isContain = true;
-				}
-				
-				if (emacsP1 || emacsP2) {
-					emacsList.get(i).add(p1);
-					emacsList.get(i).add(p2);
-					isContain = true;
-				}
+			if ((viP1 && emacsP2) || (viP2 && emacsP1)) {
+				System.out.println("CONTRADICTION AT " + idx);
+				error = true;
+				return;
 			}
 			
-			// 없으면 새로 생성
+			if (viP1 || viP2) {
+				if (!viP1) {
+					viArry[p1] = group;
+					groupViArry[group]++;
+				}
+				if (!viP2) {
+					viArry[p2] = group;
+					groupViArry[group]++;
+				}
+				isContain = true;
+			}
+			
+			if (emacsP1 || emacsP2) {
+				if (!emacsP1) {
+					emacsArry[p1] = group;
+					groupEmacsArry[group]++;
+				}
+				if (!emacsP2) {
+					emacsArry[p2] = group;
+					groupEmacsArry[group]++;
+				}
+				isContain = true;
+			}
+			
 			if (!isContain) {
-				HashSet<Integer> tempHash1 = new HashSet<Integer>();
-				HashSet<Integer> tempHash2 = new HashSet<Integer>();
-				tempHash1.add(p1);
-				tempHash1.add(p2);
-				viList.add(tempHash1);
-				emacsList.add(tempHash2);
-			}
-		} else if (opn.equals("DIS")) {
-			
-			boolean isContain = false;
-			for (int i = 0; i < viList.size(); i++) {
-				boolean viP1 = viList.get(i).contains(p1);
-				boolean viP2 = viList.get(i).contains(p2);
-				boolean emacsP1 = emacsList.get(i).contains(p1);
-				boolean emacsP2 = emacsList.get(i).contains(p2);
-				
-				if ((viP1 && viP2) || (emacsP1 && emacsP2)) {
-					// error
-					System.out.println("CONTRADICTION AT " + idx);
-					error = true;
-					break;
-				}
-				
-				if (viP1 || emacsP2) {
-					viList.get(i).add(p1);
-					emacsList.get(i).add(p2);
-					isContain = true;
-				}
-				
-				if (emacsP1 || viP2) {
-					emacsList.get(i).add(p1);
-					viList.get(i).add(p2);
-					isContain = true;
-				}
+				group++;
+				viArry[p1] = group;
+				viArry[p2] = group;
+				groupViArry[group] += 2;
 			}
 			
-			// 없으면 새로 생성
+		} else {
+			
+			if ((viP1 && viP2) || (emacsP1 && emacsP2)) {
+				System.out.println("CONTRADICTION AT " + idx);
+				error = true;
+				return;
+			}
+			
+			if (viP1 || emacsP2) {
+				if (!viP1) {
+					viArry[p1] = group;
+					groupViArry[group]++;
+				}
+				if (!emacsP2) {
+					emacsArry[p2] = group;
+					groupEmacsArry[group]++;
+				}
+				isContain = true;
+			}
+			
+			if (emacsP1 || viP2) {
+				if (!emacsP1) {
+					emacsArry[p1] = group;
+					groupEmacsArry[group]++;
+				}
+				if (!viP2) {
+					viArry[p2] = group;
+					groupViArry[group]++;
+				}
+				isContain = true;
+			}
+			
 			if (!isContain) {
-				HashSet<Integer> tempHash1 = new HashSet<Integer>();
-				HashSet<Integer> tempHash2 = new HashSet<Integer>();
-				tempHash1.add(p1);
-				tempHash2.add(p2);
-				viList.add(tempHash1);
-				emacsList.add(tempHash2);
+				group++;
+				viArry[p1] = group;
+				emacsArry[p2] = group;
+				groupViArry[group]++;
+				groupEmacsArry[group]++;
 			}
 		}
+		
+		// merge
+		
+		
 	}
 	
 	
