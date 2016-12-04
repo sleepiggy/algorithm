@@ -6,10 +6,8 @@ import java.io.InputStreamReader;
 public class EditorWars {
 	
 	
-	static int[] viArry;
-	static int[] emacsArry;
-	static int[] groupViArry;
-	static int[] groupEmacsArry;
+	static int[] editorArry;
+	static int[] groupCount;
 	
 	static int group;
 	static boolean error = false;
@@ -27,11 +25,8 @@ public class EditorWars {
 		    int caseNum = Integer.parseInt(in);
             for (int i = 0; i < caseNum; i++) {
             	
-            	viArry = new int[10000];
-            	emacsArry = new int[10000];
-            	groupViArry = new int[10000];
-            	groupEmacsArry = new int[10000];
-            	
+            	editorArry = new int[10001];
+            	groupCount = new int[10001];
             	group = 1;
             	error = false;
             	
@@ -47,27 +42,39 @@ public class EditorWars {
                     int p1 = Integer.parseInt(replyArry[1]);
                     int p2 = Integer.parseInt(replyArry[2]);
                     
-                    if (!error)
-                    	process(opn, p1, p2, j + 1);
+                    if (!error) {
+                    	if (opn.equals("ACK")) {
+                    		processACK(p1, p2, j+1);
+                    	} else {
+                    		if (p1 == p2) {
+                    			System.out.println("CONTRADICTION AT " + (j+1));
+            					error = true;
+            					continue;
+                    		}
+                    		processDIS(p1, p2, j+1);
+                    	}
+                    }
                 }
                 
                 if (!error) {
-	                int sum = 0;
-	                int viSum = 0;
-	                int emacsSum = 0;
-	                
-	                for (int j = 1; j <= group; j++) {
-	                	int viListSize = groupViArry[j];
-	                	int emacsListSize = groupEmacsArry[j];
-	                	if (viListSize <= emacsListSize) {
-	                		sum += emacsListSize;
-	                	} else {
-	                		sum += viListSize;
-	                	}
-	                	viSum += viListSize;
-	                	emacsSum += emacsListSize;
-	                }
-	                int change = peopleNum - viSum - emacsSum;
+                	
+                	for (int j = 0; j < editorArry.length; j++) {
+                		groupCount[editorArry[j]]++;
+                	}
+                	
+                	int sum = 0;
+                	int sum1 = 0;
+                	int sum2 = 0;
+                	for (int j = 1; j <= group + 1; j+=2) {
+                		int max = groupCount[j];
+                		if (groupCount[j] <= groupCount[j + 1])
+                			max = groupCount[j + 1];
+                		sum += max;
+                		sum1 += groupCount[j];
+                		sum2 += groupCount[j+1];
+                	}
+                	
+                	int change = peopleNum - sum1 - sum2;
 	                sum += change;
 	            	System.out.println("MAX PARTY SIZE IS " + sum);
                 }
@@ -81,118 +88,147 @@ public class EditorWars {
 	}
 	
 	
-	public static void process(String opn, int p1, int p2, int idx) {
+	public static void processACK(int p1, int p2, int idx) {
 		
-		boolean isContain = false;
+		boolean hasP1 = false;
+		boolean hasP2 = false;
 		
-		boolean viP1 = false;
-		boolean viP2 = false;
-		boolean emacsP1 = false;
-		boolean emacsP2 = false;
+		if (editorArry[p1] > 0)
+			hasP1 = true;
 		
-		int viP1Before = 0;
-		int viP2Before = 0;
-		int emacsP1Before = 0;
-		int emacsP2Before = 0;
+		if (editorArry[p2] > 0)
+			hasP2 = true;
 		
-		if (viArry[p1] > 0) {
-			viP1 = true;
-			viP1Before = viArry[p1]; 
-		}
-		if (viArry[p2] > 0 ) {
-			viP2 = true;
-			viP2Before = viArry[p2];
-		}
-		if (emacsArry[p1] > 0) {
-			emacsP1 = true;
-			emacsP1Before = emacsArry[p1];
-		}
-		if (emacsArry[p2] > 0) {
-			emacsP2 = true;
-			emacsP2Before = emacsArry[p2];
-		}
-		if (opn.equals("ACK")) {
+		if (hasP1 || hasP2) {
 			
-			if ((viP1 && emacsP2) || (viP2 && emacsP1)) {
-				System.out.println("CONTRADICTION AT " + idx);
-				error = true;
+			if (hasP1 && !hasP2) {
+				editorArry[p2] = editorArry[p1];
+				return;
+			}
+			if (!hasP1 && hasP2) {
+				editorArry[p1] = editorArry[p2];
 				return;
 			}
 			
-			if (viP1 || viP2) {
-				if (!viP1) {
-					viArry[p1] = group;
-					groupViArry[group]++;
+			// 둘다 기존 포함될 경우
+			int diff = Math.abs(editorArry[p1] - editorArry[p2]);
+			if (diff >= 2) {
+				mergeGroup(editorArry[p1], editorArry[p2]);
+				
+			} else {
+				if (editorArry[p1] != editorArry[p2]) {
+					System.out.println("CONTRADICTION AT " + idx);
+					error = true;
+					return;
 				}
-				if (!viP2) {
-					viArry[p2] = group;
-					groupViArry[group]++;
-				}
-				isContain = true;
-			}
-			
-			if (emacsP1 || emacsP2) {
-				if (!emacsP1) {
-					emacsArry[p1] = group;
-					groupEmacsArry[group]++;
-				}
-				if (!emacsP2) {
-					emacsArry[p2] = group;
-					groupEmacsArry[group]++;
-				}
-				isContain = true;
-			}
-			
-			if (!isContain) {
-				group++;
-				viArry[p1] = group;
-				viArry[p2] = group;
-				groupViArry[group] += 2;
 			}
 			
 		} else {
+			// p1, p2 기존 포함 안될 경우
+			group += 2;
+			editorArry[p1] = group;
+			editorArry[p2] = group;
+			return;
+		}
+		
+		
+	}
+	
+	
+	public static void processDIS(int p1, int p2, int idx) {
+		
+		
+		boolean hasP1 = false;
+		boolean hasP2 = false;
+		
+		if (editorArry[p1] > 0)
+			hasP1 = true;
+		
+		if (editorArry[p2] > 0)
+			hasP2 = true;
+		
+		if (hasP1 || hasP2) {
 			
-			if ((viP1 && viP2) || (emacsP1 && emacsP2)) {
-				System.out.println("CONTRADICTION AT " + idx);
-				error = true;
+			if (hasP1 && !hasP2) {
+				if ((editorArry[p1] % 2) == 1) {
+					editorArry[p2] = editorArry[p1] + 1;
+				} else {
+					editorArry[p2] = editorArry[p1] - 1;
+				}
+				
+				return;
+			}
+			if (!hasP1 && hasP2) {
+				if ((editorArry[p2] % 2) == 1) {
+					editorArry[p1] = editorArry[p2] + 1;
+				} else {
+					editorArry[p1] = editorArry[p2] - 1;
+				}
+				
 				return;
 			}
 			
-			if (viP1 || emacsP2) {
-				if (!viP1) {
-					viArry[p1] = group;
-					groupViArry[group]++;
+			// 둘다 기존 포함될 경우
+			int diff = Math.abs(editorArry[p1] - editorArry[p2]);
+			if (diff >= 2) {
+				// 둘은 다른 그룹
+				int p2G = editorArry[p2];
+				if ((p2G % 2) == 1) {
+					mergeGroup(editorArry[p1], p2G + 1);
+				} else {
+					mergeGroup(editorArry[p1], p2G - 1);
 				}
-				if (!emacsP2) {
-					emacsArry[p2] = group;
-					groupEmacsArry[group]++;
+				
+			} else {
+				if (editorArry[p1] == editorArry[p2]) {
+					System.out.println("CONTRADICTION AT " + idx);
+					error = true;
+					return;
 				}
-				isContain = true;
 			}
 			
-			if (emacsP1 || viP2) {
-				if (!emacsP1) {
-					emacsArry[p1] = group;
-					groupEmacsArry[group]++;
-				}
-				if (!viP2) {
-					viArry[p2] = group;
-					groupViArry[group]++;
-				}
-				isContain = true;
-			}
-			
-			if (!isContain) {
-				group++;
-				viArry[p1] = group;
-				emacsArry[p2] = group;
-				groupViArry[group]++;
-				groupEmacsArry[group]++;
-			}
+		} else {
+			// p1, p2 기존 포함 안될 경우
+			group += 2;
+			editorArry[p1] = group;
+			editorArry[p2] = group + 1;
+			return;
 		}
 		
-		// merge
+	}
+	
+	
+	public static void mergeGroup(int g1, int g2) {
 		
+		int cG = g1;
+		int eG = g2;
+		if (g1 > g2) {
+			cG = g2;
+			eG = g1;
+		}
+		
+		// 해당 G > 앞 G로 변경
+		for (int i = 0; i < editorArry.length; i++) {
+			if (editorArry[i] == eG)
+				editorArry[i] = cG;
+		}
+		
+		// 나머지 G > 앞 G'로 변경
+		if ((cG % 2) == 1) {
+			cG++;
+		} else {
+			cG--;
+		}
+		
+		if ((eG % 2) == 1) {
+			eG++;
+		} else {
+			eG--;
+		}
+		for (int i = 0; i < editorArry.length; i++) {
+			if (editorArry[i] == eG)
+				editorArry[i] = cG;
+		}
 		
 	}
 	
